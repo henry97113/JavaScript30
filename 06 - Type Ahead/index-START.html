@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <form class="search-form">
+    <input type="text" class="search" placeholder="City or State">
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+  const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+  // DOM elements
+  const search = document.querySelector('input.search');
+  const suggestions = document.querySelector('.suggestions');
+
+  let data;
+  let cities = [];
+  let searchText = '';
+
+  // 獲取 API 資料
+  getData();
+  // 監聽搜尋欄位內容
+  search.addEventListener('input', (e) => {
+    searchText = e.target.value.toLowerCase();
+    // 檢查資料中是否包含搜尋的關鍵字
+    cities = data.filter(cur => cur.city.toLowerCase().includes(searchText) || cur.state.toLowerCase().includes(searchText));
+
+    printResults();
+  });
+
+
+  function getData() {
+    const request = new XMLHttpRequest();
+    request.open('get', endpoint, true);
+    request.send(null);
+    request.addEventListener('readystatechange', (e) => {
+      if(e.target.readyState === 4 && e.target.status === 200) {
+        data = JSON.parse(request.responseText);
+      } else if(e.target.readyState === 4) {
+        console.log(`Failed to fetch data.`);
+      }
+    });
+  }
+  
+  // 渲染頁面
+  function printResults() {
+    suggestions.innerHTML = '';
+    if(searchText === '') {
+      suggestions.insertAdjacentHTML('beforeend',`<li>Filter for a city</li><li>or a state</li>`);
+    } else if (cities.length === 0) {
+      suggestions.insertAdjacentHTML('beforeend',`<li>Result not found.</li>`);
+    } else {
+      cities.forEach(cur => {
+        // 為數字加上千位數逗號
+        const formatedPopulation = Number(cur.population).toLocaleString();
+        suggestions.insertAdjacentHTML('beforeend', 
+          `
+            <li>
+              <span class="name">${cur.city}, ${cur.state}</span>
+              <span class="population">${formatedPopulation}</span>
+            </li>
+          `
+        );
+      });
+    }
+  }
+
+  // 功能與預期減少了 highlight，其餘大致上都有做到
+  // 比起 Wes Bos, 我還不會 fetch，所以只用了 XMLHttpRequest；同時因尚未學 Regular Expression，所以 highlight 部分做不出來
+</script>
+  </body>
+</html>
