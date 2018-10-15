@@ -27,14 +27,8 @@
 
   // 獲取 API 資料
   getData();
-  // 監聽搜尋欄位內容
-  search.addEventListener('input', (e) => {
-    searchText = e.target.value.toLowerCase();
-    // 檢查資料中是否包含搜尋的關鍵字
-    cities = data.filter(cur => cur.city.toLowerCase().includes(searchText) || cur.state.toLowerCase().includes(searchText));
-
-    printResults();
-  });
+  // 搜尋事件
+  search.addEventListener('input', printResults);
 
 
   function getData() {
@@ -49,9 +43,17 @@
       }
     });
   }
+
+  function findMatch(e) {
+    searchText = e.target.value.toLowerCase();
+    // 檢查資料中是否包含搜尋的關鍵字
+    cities = data.filter(cur => cur.city.toLowerCase().includes(searchText) || cur.state.toLowerCase().includes(searchText));
+  }
   
   // 渲染頁面
-  function printResults() {
+  function printResults(e) {
+    findMatch(e);
+
     suggestions.innerHTML = '';
     if(searchText === '') {
       suggestions.insertAdjacentHTML('beforeend',`<li>Filter for a city</li><li>or a state</li>`);
