@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  const canvas = document.querySelector('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.lineWidth =  100;
+
+
+  let isDrawing = false;
+  let lastX = 0;
+  let lastY = 0;
+  let hue = 0;
+  let width = 100;
+  let widthVelocity = 1;
+
+  function draw(e) {
+    if(!isDrawing) return;
+    // 開始畫線
+    ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(e.x, e.y);
+    ctx.stroke();
+    
+    // 紀錄最後座標
+    lastX = e.x;
+    lastY = e.y;
+
+    // 改變粗細
+    if (width <= 1 || width > 100) {
+      widthVelocity = -widthVelocity;
+    }
+    width += widthVelocity;
+
+    // 改變顏色
+    if (hue >= 360) {
+      hue = 0;
+    } else if (hue > -1) {
+      hue++;
+    }
+  }
+
+  canvas.addEventListener('mousedown', function(e) {
+    isDrawing = true;
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+  });
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', function() {
+    isDrawing = false;
+  });
+  canvas.addEventListener('mouseleave', function() {
+    isDrawing = false;
+  });
+</script>
+
+<style>
+  html, body {
+    margin: 0;
+  }
+</style>
+
+</body>
+</html>
