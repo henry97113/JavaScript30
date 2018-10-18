@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('Hello!');
+
+    // Interpolated
+    console.log('I am an %s string', '🦉');
+
+    // Styled
+    console.log('%c I am some hugeee text!', 'font-size: 20px; color: tomato');
+
+    // warning!
+    console.warn('Oh snap!');
+
+    // Error :|
+    console.error('Something went wrong!');
+
+    // Info
+    console.info('Hey this is kinda cool.');
+
+    // Testing
+    const p = document.querySelector('p');
+    console.assert(p.classList.contains('test'), 'That is not true!');  // 逗點後的訊息只有在前一項為 false 時才會顯示
+    // clearing
+    // console.clear();
+
+    // Viewing DOM Elements
+    console.dir(p);  // 查看該 DOM 元素所有的方法與參數 (properties & methods)
+
+    // Grouping together
+    dogs.forEach(dog => {
+      console.groupCollapsed(`${dog.name}`);  // console.group(..) 則預設會展開內容
+      console.log(`This is ${dog.name}.`);
+      console.log(`${dog.name} is ${dog.age} years old.`);
+      console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+      console.groupEnd(`${dog.name}`);
+    });
+
+    // counting
+    console.count('Henry');
+    console.count('Henry');
+    console.count('Kai');
+    console.count('Kai');
+    console.count('Henry');
+    console.count('Kai');
+    console.count('Kai');
+    console.count('Henry');
+    console.count('Kai');
+
+    // timing
+    console.time('fetching data');
+    const xhr = new XMLHttpRequest();
+    xhr.addEventListener('readystatechange', e => {
+      if (e.target.readyState === 4 && e.target.status === 200) {
+        const data = JSON.parse(xhr.responseText);
+        console.timeEnd('fetching data');
+        console.log(data);
+      } else if (e.target.readyState === 4) {
+        console.log('Failed to fetch data');
+      }
+    });
+    xhr.open('get', 'http://puzzle.mead.io/puzzle', true);
+    xhr.send();
+    
+    // table
+    console.table(dogs);  // 當放入 array 會轉變呈現方式
+
+  </script>
+</body>
+</html>
