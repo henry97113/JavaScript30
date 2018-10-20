@@ -43,6 +43,9 @@ function changeProgress(e) {
 
 function autoChangeStatus() {
     progressFilled.style.flexBasis = `${(video.currentTime / video.duration) * 100}%`;
+    
+    // 改變 playToggle 的圖標
+    if (this.ended) playToggle.textContent = '►';
 }
 
 function goFullScreen() {
