@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  // cornify_count = 0;
+  const secretCode = 'henshuai';
+  let codeArr = [];
+  let activated = false;
+
+  window.addEventListener('keyup', function(e) {
+    codeArr.push(e.key);
+    if (codeArr.length > secretCode.length) {
+      codeArr.shift();
+    }
+    if (codeArr.join('').includes(secretCode)) {
+      activated = true;
+    }
+    if (activated) {  // 當啟動後按下任何鍵都會增加彩虹小馬
+      cornify_add();
+    }
+    console.log(codeArr);
+  });
+</script>
+</body>
+</html>
