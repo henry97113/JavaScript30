@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mouse Shadow</title>
+</head>
+<body>
+
+  <div class="hero">
+    <h1 contenteditable>💩💩💩</h1>
+  </div>
+
+  <style>
+  html {
+    color: black;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+  }
+
+  h1 {
+    text-shadow: 10px 10px 0 rgba(0,0,0,1);
+    font-size: 100px;
+  }
+  </style>
+
+<script>
+  const hero = document.querySelector('.hero');
+  const text = hero.querySelector('h1');
+  const walk = 200; // 200px
+  
+  function shadow(e) {
+    const {offsetWidth: width, offsetHeight: height} = hero;
+    let {offsetX: x, offsetY: y} = e;   // 有個問題是當滑入 .text 時 e.offsetX & e.offsetY 會變成 .text 的數值而不是 .hero 的
+    
+    if (this !== e.target) {  // this 是 .hero，ˋ這裡的意思是當滑鼠進入 .text 時
+      x += e.target.offsetLeft;
+      y += e.target.offsetTop;
+    }
+
+    const xWalk = Math.round((x / width * walk) - (walk / 2));
+    const yWalk = Math.round((y / height * walk) - (walk / 2));
+    text.style.textShadow = `${xWalk}px ${yWalk}px 10px rgba(155,119,93,0.7), ${-xWalk}px ${-yWalk}px 10px rgba(240,226,205,0.7)`
+    
+  }
+
+  hero.addEventListener('mousemove', shadow);
+  
+</script>
+</body>
+</html>
