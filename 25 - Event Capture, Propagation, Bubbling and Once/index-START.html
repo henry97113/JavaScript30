@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Understanding JavaScript's Capture</title>
+</head>
+<body class="bod">
+
+  <div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+  </div>
+  <button class="button">Can only be clicked once</button>
+
+<style>
+  html {
+    box-sizing: border-box;
+  }
+  
+  *, *:before, *:after { 
+    box-sizing: inherit; 
+  }
+
+  div {
+    width: 100%;
+    padding: 100px;
+  }
+
+  .one {
+    background: thistle;
+  }
+
+  .two {
+    background: mistyrose;
+  }
+
+  .three {
+    background: coral;
+  }
+</style>
+<script>
+  const div = document.querySelectorAll('div');
+  const button = document.querySelector('button');
+
+  function logText(e) {
+    // prevent bubbling & capturing
+    // e.stopPropagation();
+
+    console.log(this.classList.value);
+  }
+
+  div.forEach(div => div.addEventListener('click', logText, false));
+  button.addEventListener('click', logText, {capture: false, once: true});
+</script>
+</body>
+</html>
